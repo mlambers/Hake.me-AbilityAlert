@@ -11,4 +11,4 @@
 * Moonlight shadow.
 * Vendetta.
 * Smoke of deceit.
-* Someone attacking roshan.
+* Someone attacking roshan(required to see Roshan at least once).
