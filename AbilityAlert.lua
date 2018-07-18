@@ -32,7 +32,7 @@ function AbilityAlert.OnUnitAnimation(animation)
 		if ParticleData.RoshanAttack == false then
 			local FriendlyUnitRadiusChecker = NPCs.InRadius(Vector(-2319.4375, 1714.4375, 159.96875), 364, Entity.GetTeamNum(Heroes.GetLocal()), Enum.TeamType.TEAM_FRIEND)
 			if #FriendlyUnitRadiusChecker < 1 then
-				Chat.Print("ConsoleChat", '</font><font color="red;"> Someone attacking roshan. </font>')
+				Chat.Print("ConsoleChat", '<font color="red"> Someone attacking roshan. </font>')
 				ParticleData.RoshanAttack = true 
 				ParticleData.RoshanAttackNextTime = GameRules.GetGameTime() + 3
 			end
@@ -66,6 +66,26 @@ function AbilityAlert.InsertParticleTable(particle)
 			}
 			return true
 		end
+	elseif particle.name == "roshan_slam" then
+		ParticleData.Table[#ParticleData.Table + 1] = 
+		{
+			index = particle.index,
+			name = particle.name,
+			endTime = GameRules.GetGameTime() + 5,
+			minimapImg = "minimap_roshancamp"
+		}
+		return true
+	elseif particle.name == "roshan_spawn" then
+		ParticleData.Table[#ParticleData.Table + 1] = 
+		{
+			index = particle.index,
+			name = particle.name,
+			endTime = GameRules.GetGameTime() + 5,
+			minimapImg = "minimap_roshancamp",
+			position = Vector(-2464.245, 2016.373)
+		}
+		Chat.Print("ConsoleChat", '<font color="Green"> Roshan spawn!</font>')
+		return true
 	elseif particle.name == "nyx_assassin_vendetta_start" then
 		ParticleData.Table[#ParticleData.Table + 1] = 
 		{
@@ -101,7 +121,7 @@ function AbilityAlert.OnParticleUpdate(particle)
 				if #firstRadiusCheck > 0 and #secondRadiusCheck > 0 then 
 					ParticleData.Table[keyTable] = nil
 				else
-					Chat.Print("ConsoleChat", '</font><font color="red;"> Smoke Of Deceit is being used. </font>')
+					Chat.Print("ConsoleChat", '<font color="red"> Smoke Of Deceit is being used. </font>')
 					ParticleData.Table[keyTable].position = particle.position
 				end
 			elseif TableValue.name == "nyx_assassin_vendetta_start" then
@@ -110,7 +130,15 @@ function AbilityAlert.OnParticleUpdate(particle)
 					ParticleData.Table[keyTable] = nil
 				else
 					ParticleData.Table[keyTable].position = particle.position
-					Chat.Print("ConsoleChat", '</font><font color="red;"> Vendetta is being used. </font>')
+					Chat.Print("ConsoleChat", '<font color="red"> Vendetta is being used. </font>')
+				end
+			elseif TableValue.name == "roshan_slam" then
+				local FriendlyUnitRadiusChecker = NPCs.InRadius(Vector(-2319.4375, 1714.4375, 159.96875), 364, Entity.GetTeamNum(Heroes.GetLocal()), Enum.TeamType.TEAM_FRIEND)
+				if #FriendlyUnitRadiusChecker < 1 then
+					ParticleData.Table[keyTable].position = Vector(-2464.245, 2016.373)
+					Chat.Print("ConsoleChat", '<font color="red"> Someone attacking roshan. </font>')
+				else
+					ParticleData.Table[keyTable] = nil
 				end
 				
 			end
@@ -126,7 +154,7 @@ function AbilityAlert.OnParticleUpdateEntity(particle)
 			if particle.controlPoint == 0 then
 			
 				if TableValue.name == "mirana_moonlight_cast" then
-					Chat.Print("ConsoleChat", '</font><font color="red;"> Moonlight shadow </font>')
+					Chat.Print("ConsoleChat", '<font color="red"> Moonlight shadow </font>')
 					ParticleData.Table[keyTable].position = particle.position
 					ParticleData.Table[keyTable].minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
 				end

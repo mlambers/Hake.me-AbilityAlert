@@ -12,3 +12,4 @@
 * Vendetta.
 * Smoke of deceit.
 * Someone attacking roshan(required to see Roshan at least once).
+* Roshan spawn.
