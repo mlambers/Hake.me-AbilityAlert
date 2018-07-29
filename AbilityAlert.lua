@@ -5,36 +5,45 @@ AbilityAlert.optionEnable = Menu.AddOption( {"mlambers", "Ability Alert"}, "1. E
 local ParticleData = {}
 ParticleData.Table = {}
 ParticleData.RoshanAttack = false 
-ParticleData.RoshanAttackNextTime = nil
+ParticleData.RoshanAttackNextTime = 0
 
 function AbilityAlert.OnScriptLoad()
+	for i = #ParticleData.Table, 1, -1 do
+		ParticleData.Table[i] = nil
+	end
 	ParticleData.Table = {}
 	ParticleData.RoshanAttack = false 
-	ParticleData.RoshanAttackNextTime = nil
+	ParticleData.RoshanAttackNextTime = 0
 end
 
 function AbilityAlert.OnGameStart()
+	for i = #ParticleData.Table, 1, -1 do
+		ParticleData.Table[i] = nil
+	end
 	ParticleData.Table = {}
 	ParticleData.RoshanAttack = false 
-	ParticleData.RoshanAttackNextTime = nil
+	ParticleData.RoshanAttackNextTime = 0
 end
 
 function AbilityAlert.OnGameEnd()
+	for i = #ParticleData.Table, 1, -1 do
+		ParticleData.Table[i] = nil
+	end
 	ParticleData.Table = {}
 	ParticleData.RoshanAttack = false 
-	ParticleData.RoshanAttackNextTime = nil
+	ParticleData.RoshanAttackNextTime = 0
 end
 
 function AbilityAlert.OnUnitAnimation(animation)
 	if not Menu.IsEnabled(AbilityAlert.optionEnable) then return end
-
+	if not Heroes.GetLocal() then return end
 	if animation.sequenceName == "roshan_attack" or animation.sequenceName == "roshan_attack2" then 
 		if ParticleData.RoshanAttack == false then
 			local FriendlyUnitRadiusChecker = NPCs.InRadius(Vector(-2319.4375, 1714.4375, 159.96875), 364, Entity.GetTeamNum(Heroes.GetLocal()), Enum.TeamType.TEAM_FRIEND)
 			if #FriendlyUnitRadiusChecker < 1 then
 				Chat.Print("ConsoleChat", '<font color="red"> Someone attacking roshan. </font>')
 				ParticleData.RoshanAttack = true 
-				ParticleData.RoshanAttackNextTime = GameRules.GetGameTime() + 3
+				ParticleData.RoshanAttackNextTime = os.clock() + 4
 			end
 		end
 	end
@@ -109,6 +118,8 @@ end
 
 function AbilityAlert.OnParticleUpdate(particle)
 	if not Menu.IsEnabled(AbilityAlert.optionEnable) then return end
+	if not Heroes.GetLocal() then return end
+	
     for keyTable = 1, #ParticleData.Table do
 		local TableValue = ParticleData.Table[keyTable]
         if TableValue and particle.index == TableValue.index and particle.controlPoint == 0 then
@@ -148,6 +159,7 @@ end
 
 function AbilityAlert.OnParticleUpdateEntity(particle)
 	if not Menu.IsEnabled(AbilityAlert.optionEnable) then return end
+	if not Heroes.GetLocal() then return end
 	for keyTable = 1, #ParticleData.Table do
 		local TableValue = ParticleData.Table[keyTable]
         if TableValue and particle.index == TableValue.index then
@@ -165,8 +177,8 @@ end
 
 function AbilityAlert.OnParticleDestroy(particle)
 	if not Menu.IsEnabled(AbilityAlert.optionEnable) then return end
-	
-	for keyTable = 1, #ParticleData.Table do
+	if not Heroes.GetLocal() then return end
+	for keyTable = #ParticleData.Table, 1, -1 do
 		local TableValue = ParticleData.Table[keyTable]
         if TableValue and particle.index == TableValue.index then
 			ParticleData.Table[keyTable] = nil
@@ -174,8 +186,12 @@ function AbilityAlert.OnParticleDestroy(particle)
     end
 end
 
-function AbilityAlert.OnUpdate()
+function AbilityAlert.OnDraw()
+	if Engine.IsInGame() == false then return end
 	if not Menu.IsEnabled(AbilityAlert.optionEnable) then return end
+	if GameRules.GetGameState() < 4 then return end
+	if GameRules.GetGameState() > 5 then return end
+	
 	local myHero = Heroes.GetLocal()
 	
 	if not myHero then return end
@@ -196,11 +212,10 @@ function AbilityAlert.OnUpdate()
 	end
 	
 	if ParticleData.RoshanAttack then
-		if ParticleData.RoshanAttackNextTime < GameRules.GetGameTime() then
-			ParticleData.RoshanAttackNextTime = nil 
+		if ParticleData.RoshanAttackNextTime < os.clock() then
+			ParticleData.RoshanAttackNextTime = 0 
 			ParticleData.RoshanAttack = false
 		else
-		
 			MiniMap.AddIconByName(nil, "minimap_plaincircle", Vector(-2464.245, 2016.373), 255, 0, 0, 255, 0.1, 600)
 		end
 	end
