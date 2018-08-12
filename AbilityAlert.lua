@@ -56,8 +56,8 @@ function AbilityAlert.InsertParticleTable(particle)
 		{
 			index = particle.index,
 			name = particle.name,
-			endTime = GameRules.GetGameTime() + 5,
-			duration = 5,
+			endTime = os.clock() + 5,
+			duration = 1,
 			alertImg1 = "item_smoke_of_deceit",
 			alertImg2 = "item_smoke_of_deceit",
 			minimapImg = "minimap_plaincircle",
@@ -69,8 +69,8 @@ function AbilityAlert.InsertParticleTable(particle)
 			{
 				index = particle.index,
 				name = particle.name,
-				endTime = GameRules.GetGameTime() + 5,
-				duration = 5,
+				endTime = os.clock() + 5,
+				duration = 1,
 				alertImg1 = NPC.GetUnitName(particle.entity),
 				alertImg2 = "mirana_invis",
 				alertImg3 = "double_arrow_right_png",
@@ -82,8 +82,8 @@ function AbilityAlert.InsertParticleTable(particle)
 		{
 			index = particle.index,
 			name = particle.name,
-			endTime = GameRules.GetGameTime() + 5,
-			duration = 5,
+			endTime = os.clock() + 5,
+			duration = 1,
 			minimapImg = "minimap_roshancamp"
 		}
 		return true
@@ -92,8 +92,8 @@ function AbilityAlert.InsertParticleTable(particle)
 		{
 			index = particle.index,
 			name = particle.name,
-			endTime = GameRules.GetGameTime() + 5,
-			duration = 5,
+			endTime = os.clock() + 5,
+			duration = 1,
 			shouldDraw = true,
 			minimapImg = "minimap_roshancamp",
 			position = Vector(-2464.245, 2016.373)
@@ -105,8 +105,8 @@ function AbilityAlert.InsertParticleTable(particle)
 		{
 			index = particle.index,
 			name = particle.name,
-			endTime = GameRules.GetGameTime() + 5,
-			duration = 5,
+			endTime = os.clock() + 5,
+			duration = 1,
 			minimapImg = "minimap_plaincircle",
 		}
 		
@@ -138,9 +138,8 @@ function AbilityAlert.OnParticleUpdate(particle)
 				if #firstRadiusCheck > 0 and #secondRadiusCheck > 0 then 
 					ParticleData.Table[keyTable] = nil
 				else
-					Chat.Print("ConsoleChat", '<font color="red"> Smoke Of Deceit is being used. </font>')
 					ParticleData.Table[keyTable].position = particle.position
-					ParticleData.Table[keyTable].shouldDraw = true
+					Chat.Print("ConsoleChat", '<font color="red"> Smoke Of Deceit is being used. </font>')
 				end
 			elseif TableValue.name == "nyx_assassin_vendetta_start" then
 				local firstRadiusCheck = NPCs.InRadius(particle.position, 50, Entity.GetTeamNum(Heroes.GetLocal()), Enum.TeamType.TEAM_FRIEND)
@@ -148,14 +147,12 @@ function AbilityAlert.OnParticleUpdate(particle)
 					ParticleData.Table[keyTable] = nil
 				else
 					ParticleData.Table[keyTable].position = particle.position
-					ParticleData.Table[keyTable].shouldDraw = true
 					Chat.Print("ConsoleChat", '<font color="red"> Vendetta is being used. </font>')
 				end
 			elseif TableValue.name == "roshan_slam" then
 				local FriendlyUnitRadiusChecker = NPCs.InRadius(Vector(-2319.4375, 1714.4375, 159.96875), 364, Entity.GetTeamNum(Heroes.GetLocal()), Enum.TeamType.TEAM_FRIEND)
 				if #FriendlyUnitRadiusChecker < 1 then
 					ParticleData.Table[keyTable].position = Vector(-2464.245, 2016.373)
-					ParticleData.Table[keyTable].shouldDraw = true
 					Chat.Print("ConsoleChat", '<font color="red"> Someone attacking roshan. </font>')
 				else
 					ParticleData.Table[keyTable] = nil
@@ -175,10 +172,9 @@ function AbilityAlert.OnParticleUpdateEntity(particle)
 			if particle.controlPoint == 0 then
 			
 				if TableValue.name == "mirana_moonlight_cast" then
-					Chat.Print("ConsoleChat", '<font color="red"> Moonlight shadow </font>')
 					ParticleData.Table[keyTable].position = particle.position
 					ParticleData.Table[keyTable].minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-					ParticleData.Table[keyTable].shouldDraw = true
+					Chat.Print("ConsoleChat", '<font color="red"> Moonlight shadow </font>')
 				end
 			end
         end
@@ -196,7 +192,7 @@ function AbilityAlert.OnParticleDestroy(particle)
     end
 end
 
-function AbilityAlert.OnDraw()
+function AbilityAlert.OnUpdate()
 	if Engine.IsInGame() == false then return end
 	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
 	if GameRules.GetGameState() < 4 then return end
@@ -209,14 +205,11 @@ function AbilityAlert.OnDraw()
 	for keyTable = 1, #ParticleData.Table do
 		local TableValue = ParticleData.Table[keyTable]
 		if TableValue then
-			if TableValue.endTime < GameRules.GetGameTime() then
+			if TableValue.endTime < os.clock() then
 				ParticleData.Table[keyTable] = nil
 			else
-				if TableValue.position  then
-					if TableValue.shouldDraw == true then
-						MiniMap.AddIconByName(nil, TableValue.minimapImg, TableValue.position, 255, 0, 0, 255, TableValue.duration, 800)
-						ParticleData.Table[keyTable].shouldDraw = false
-					end
+				if TableValue.position ~= nil then
+					MiniMap.AddIconByName(nil, TableValue.minimapImg, TableValue.position, 255, 0, 0, 255, TableValue.duration, 950)
 				end
 				
 			end
@@ -228,7 +221,7 @@ function AbilityAlert.OnDraw()
 			ParticleData.RoshanAttackNextTime = 0 
 			ParticleData.RoshanAttack = false
 		else
-			MiniMap.AddIconByName(nil, "minimap_plaincircle", Vector(-2464.245, 2016.373), 255, 0, 0, 255, 0.1, 600)
+			MiniMap.AddIconByName(nil, "minimap_plaincircle", Vector(-2464.245, 2016.373), 255, 0, 0, 255, 1, 600)
 		end
 	end
 end
