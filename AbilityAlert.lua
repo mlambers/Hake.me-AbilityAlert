@@ -70,6 +70,7 @@ function AbilityAlert.InsertParticleTable(particle)
 				index = particle.index,
 				name = particle.name,
 				endTime = GameRules.GetGameTime() + 5,
+				duration = 5,
 				alertImg1 = NPC.GetUnitName(particle.entity),
 				alertImg2 = "mirana_invis",
 				alertImg3 = "double_arrow_right_png",
@@ -177,6 +178,7 @@ function AbilityAlert.OnParticleUpdateEntity(particle)
 					Chat.Print("ConsoleChat", '<font color="red"> Moonlight shadow </font>')
 					ParticleData.Table[keyTable].position = particle.position
 					ParticleData.Table[keyTable].minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+					ParticleData.Table[keyTable].shouldDraw = true
 				end
 			end
         end
