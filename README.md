@@ -1,4 +1,4 @@
-# Hake.me-AbilityAlert
+# Hake.me-AbilityAlert Version 0.2a
 
 ### Running the script
 
@@ -13,3 +13,4 @@
 * Smoke of deceit.
 * Someone attacking roshan(required to see Roshan at least once).
 * Roshan spawn.
+* Roshan slam.
