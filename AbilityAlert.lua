@@ -66,7 +66,6 @@ function AbilityAlert.OnUnitAnimation(animation)
 end
 
 function AbilityAlert.InsertParticleTable(particle)
-	
 	if particle.name == "smoke_of_deceit" and particle.entityForModifiers ~= nil then
 		
 		ParticleData.Table[#ParticleData.Table + 1] = 
@@ -76,8 +75,29 @@ function AbilityAlert.InsertParticleTable(particle)
 			duration = 5,
 			minimapImg = "minimap_plaincircle"
 		}
-		
 		return true
+	elseif particle.name == "clinkz_death_pact_buff" and particle.entity ~= nil then
+		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
+			ParticleData.Table[#ParticleData.Table + 1] = 
+			{
+				index = particle.index,
+				name = particle.name,
+				duration = 2,
+				minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+			}
+			return true
+		end
+	elseif particle.name == "clinkz_windwalk" and particle.entity ~= nil then
+		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
+			ParticleData.Table[#ParticleData.Table + 1] = 
+			{
+				index = particle.index,
+				name = particle.name,
+				duration = 3,
+				minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+			}
+			return true
+		end
 	elseif particle.name == "mirana_moonlight_cast" and particle.entity ~= nil then
 		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
 			
@@ -86,6 +106,18 @@ function AbilityAlert.InsertParticleTable(particle)
 				index = particle.index,
 				name = particle.name,
 				duration = 5,
+				minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+			}
+			return true
+		end
+	elseif particle.name == "nevermore_necro_souls" and particle.entity ~= nil then
+		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
+			
+			ParticleData.Table[#ParticleData.Table + 1] = 
+			{
+				index = particle.index,
+				name = particle.name,
+				duration = 1,
 				minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
 			}
 			return true
@@ -190,7 +222,18 @@ function AbilityAlert.OnParticleUpdateEntity(particle)
 					Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red"> Enemy using Moonlight Shadow </font>')
 				end
 			elseif particle.controlPoint == 1 then
-				if TableValue.name == "riki_blink_strike" then
+				
+				if TableValue.name == "clinkz_death_pact_buff" then
+					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
+					ParticleData.Table[keyTable] = nil
+				elseif TableValue.name == "clinkz_windwalk" then
+					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
+					ParticleData.Table[keyTable] = nil
+					Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red"> Windwalk is being used.</font>')
+				elseif TableValue.name == "nevermore_necro_souls" then
+					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
+					ParticleData.Table[keyTable] = nil
+				elseif TableValue.name == "riki_blink_strike" then
 					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
 					ParticleData.Table[keyTable] = nil
 				end
