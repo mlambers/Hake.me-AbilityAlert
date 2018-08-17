@@ -1,4 +1,4 @@
-# Hake.me-AbilityAlert Version 0.2a
+# Hake.me-AbilityAlert Version 0.3
 
 ### Running the script
 
