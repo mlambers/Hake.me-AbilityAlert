@@ -99,6 +99,17 @@ function AbilityAlert.InsertParticleTable(particle)
 			minimapImg = "minimap_plaincircle"
 		}
 		return true
+	elseif particle.name == "riki_blink_strike" and particle.entityForModifiers ~= nil then
+		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entityForModifiers) == false and Entity.IsDormant( particle.entityForModifiers) == true then
+			ParticleData.Table[#ParticleData.Table + 1] = 
+			{
+				index = particle.index,
+				name = particle.name,
+				duration = 1,
+				minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entityForModifiers)
+			}
+			return true
+		end
 	elseif particle.name == "roshan_spawn" then
 		MiniMap.AddIconByName(nil, "minimap_roshancamp", Vector(-2464.245, 2016.373), 255, 150, 0, 255, 5, 950)
 		Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Lime"> Roshan spawn!</font>')
@@ -177,6 +188,11 @@ function AbilityAlert.OnParticleUpdateEntity(particle)
 					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 950)
 					ParticleData.Table[keyTable] = nil
 					Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red"> Enemy using Moonlight Shadow </font>')
+				end
+			elseif particle.controlPoint == 1 then
+				if TableValue.name == "riki_blink_strike" then
+					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
+					ParticleData.Table[keyTable] = nil
 				end
 			end
         end
