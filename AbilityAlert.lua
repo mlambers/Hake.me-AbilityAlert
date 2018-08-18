@@ -76,6 +76,30 @@ function AbilityAlert.InsertParticleTable(particle)
 			minimapImg = "minimap_plaincircle"
 		}
 		return true
+	elseif particle.name == "antimage_blade_hit" and particle.entity ~= nil then
+		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false and Entity.IsDormant( particle.entity) == true then
+			
+			ParticleData.Table[#ParticleData.Table + 1] = 
+			{
+				index = particle.index,
+				name = particle.name,
+				duration = 1,
+				minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+			}
+			return true
+		end
+	elseif particle.name == "axe_beserkers_call_owner" and particle.entity ~= nil then
+		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false and Entity.IsDormant( particle.entity) == true then
+			
+			ParticleData.Table[#ParticleData.Table + 1] = 
+			{
+				index = particle.index,
+				name = particle.name,
+				duration = 1,
+				minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+			}
+			return true
+		end
 	elseif particle.name == "clinkz_death_pact_buff" and particle.entity ~= nil then
 		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
 			ParticleData.Table[#ParticleData.Table + 1] = 
@@ -94,6 +118,53 @@ function AbilityAlert.InsertParticleTable(particle)
 				index = particle.index,
 				name = particle.name,
 				duration = 3,
+				minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+			}
+			return true
+		end
+	elseif particle.name == "doom_bringer_devour" and particle.entity ~= nil then
+		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false and Entity.IsDormant( particle.entity) == true then
+			ParticleData.Table[#ParticleData.Table + 1] = 
+			{
+				index = particle.index,
+				name = particle.name,
+				duration = 2,
+				minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+			}
+			return true
+		end
+	elseif particle.name == "invoker_exort_orb" and particle.entity ~= nil then
+		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false and Entity.IsDormant( particle.entity) == true then
+			
+			ParticleData.Table[#ParticleData.Table + 1] = 
+			{
+				index = particle.index,
+				name = particle.name,
+				duration = 0.5,
+				minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+			}
+			return true
+		end
+	elseif particle.name == "invoker_quas_orb" and particle.entity ~= nil then
+		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false and Entity.IsDormant( particle.entity) == true then
+			
+			ParticleData.Table[#ParticleData.Table + 1] = 
+			{
+				index = particle.index,
+				name = particle.name,
+				duration = 0.5,
+				minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+			}
+			return true
+		end
+	elseif particle.name == "invoker_wex_orb" and particle.entity ~= nil then
+		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false and Entity.IsDormant( particle.entity) == true then
+			
+			ParticleData.Table[#ParticleData.Table + 1] = 
+			{
+				index = particle.index,
+				name = particle.name,
+				duration = 0.5,
 				minimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
 			}
 			return true
@@ -216,20 +287,37 @@ function AbilityAlert.OnParticleUpdateEntity(particle)
 		
         if TableValue ~= nil and particle.index == TableValue.index then
 			if particle.controlPoint == 0 then
-				if TableValue.name == "mirana_moonlight_cast" then
+				if TableValue.name == "antimage_blade_hit" then
+					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
+					ParticleData.Table[keyTable] = nil
+				elseif TableValue.name == "mirana_moonlight_cast" then
 					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 950)
 					ParticleData.Table[keyTable] = nil
 					Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red"> Enemy using Moonlight Shadow </font>')
 				end
 			elseif particle.controlPoint == 1 then
-				
-				if TableValue.name == "clinkz_death_pact_buff" then
+				if TableValue.name == "axe_beserkers_call_owner" then
+					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
+					ParticleData.Table[keyTable] = nil
+				elseif TableValue.name == "clinkz_death_pact_buff" then
 					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
 					ParticleData.Table[keyTable] = nil
 				elseif TableValue.name == "clinkz_windwalk" then
 					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
 					ParticleData.Table[keyTable] = nil
 					Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red"> Windwalk is being used.</font>')
+				elseif TableValue.name == "doom_bringer_devour" then
+					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
+					ParticleData.Table[keyTable] = nil
+				elseif TableValue.name == "invoker_exort_orb" then
+					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
+					ParticleData.Table[keyTable] = nil
+				elseif TableValue.name == "invoker_quas_orb" then
+					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
+					ParticleData.Table[keyTable] = nil
+				elseif TableValue.name == "invoker_wex_orb" then
+					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
+					ParticleData.Table[keyTable] = nil
 				elseif TableValue.name == "nevermore_necro_souls" then
 					MiniMap.AddIconByName(nil, TableValue.minimapImg, particle.position, 255, 255, 255, 255, TableValue.duration, 1000)
 					ParticleData.Table[keyTable] = nil

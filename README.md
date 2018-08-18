@@ -1,4 +1,4 @@
-# Hake.me-AbilityAlert Version 0.3b
+# Hake.me-AbilityAlert Version 0.3c
 
 # Features!
   - Draw on the minimap when certain Abilities being used.
@@ -18,15 +18,25 @@
        * Roshan slam.
        * Someone attacking roshan(required to see Roshan at least once).
   - Heroes:
-	   1. Clinkz
+	   1. Anti-Mage
+            * Mana Break
+	   2. Axe
+            * Beserkers call
+	   3. Clinkz
             * Death pact
 			* Windwalk
-       2. Mirana
+	   4. Doom
+            * Devour
+	   5. Invoker
+            * Quas
+			* Wex
+			* Exort
+       6. Mirana
             * Moonlight shadow(also supported if Rubick from enemy team steal Moonlight shadow).
-       3. Nevermore(Shadow Fiend)
+       7. Nevermore(Shadow Fiend)
             * Necromastery
-       4. Nyx Assassin
+       8. Nyx Assassin
             * Vendetta
-       5. Rikimaru
+       9. Rikimaru
             * Blink strike
        
