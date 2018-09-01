@@ -1,4 +1,4 @@
-# Hake.me-AbilityAlert Version 0.4
+# Hake.me-AbilityAlert Version 0.5
 
 # Features!
   - Draw on the minimap when certain Abilities being used.
@@ -16,27 +16,36 @@
        * Smoke of deceit.
        * Roshan spawn.
        * Roshan slam.
-       * Someone attacking roshan(required to see Roshan at least once).
   - Heroes:
 	   1. Anti-Mage
             * Mana Break
+			* Blink
 	   2. Axe
             * Beserkers call
-	   3. Clinkz
+	   3. Bounty Hunter
+			* Windwalk
+			* Jinada active buff
+	   4. Clinkz
             * Death pact
 			* Windwalk
-	   4. Doom
+	   5. Doom
             * Devour
-	   5. Invoker
+	   6. Invoker
             * Quas
 			* Wex
 			* Exort
-       6. Mirana
+	   7. Legion
+			* Courage proc(skill 3)
+       8. Mirana
             * Moonlight shadow(also supported if Rubick from enemy team steal Moonlight shadow).
-       7. Nevermore(Shadow Fiend)
+	   9. Necrolyte
+			* Sadist buff
+       10. Nevermore(Shadow Fiend)
             * Necromastery
-       8. Nyx Assassin
+       11. Nyx Assassin
             * Vendetta
-       9. Rikimaru
+       12. Rikimaru
             * Blink strike
+	   13. Tinker
+			* Rearm
        

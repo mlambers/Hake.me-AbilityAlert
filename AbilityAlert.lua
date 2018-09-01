@@ -1,47 +1,216 @@
+---------------------------------
+--- Ability Alert Version 0.5 ---
+---------------------------------
+
 local AbilityAlert = {}
 
-AbilityAlert.optionEnable = Menu.AddOption( {"mlambers", "Ability Alert"}, "1. Enable", "Enable this script.")
+AbilityAlert.optionEnable = Menu.AddOption({"mlambers", "Ability Alert"}, "1. Enable", "Enable this script.")
 
 local FunctionFloor = math.floor
+
+local ParticleManager = {
+	ParticleUnique = {
+		{
+			Name = "roshan_spawn",
+			TrackDuration = 1,
+			Duration = 4,
+			HasMessage = true,
+			Message = "Roshan spawn!",
+			Position = Vector(-2464.245, 2016.373),
+			MinimapImage = "minimap_roshancamp"
+		},
+		{
+			Name = "roshan_slam",
+			TrackDuration = 1,
+			Duration = 4,
+			HasMessage = true,
+			Message = "Someone attack Roshan.",
+			MinimapImage = "minimap_roshancamp"
+		},
+		{
+			Name = "bounty_hunter_windwalk",
+			TrackDuration = 1,
+			Duration = 4,
+			HasMessage = true,
+			Message = "bounty_hunter_windwalk is being used.",
+			MinimapImage = "minimap_plaincircle"
+		},
+		{
+			Name = "smoke_of_deceit",
+			TrackDuration = 1,
+			Duration = 4,
+			HasMessage = true,
+			Message = "Smoke of Deceit is being used.",
+			MinimapImage = "minimap_plaincircle"
+		},
+		{
+			Name = "nyx_assassin_vendetta_start",
+			TrackDuration = 1,
+			Duration = 4,
+			HasMessage = true,
+			Message = "Vendetta is being used.",
+			MinimapImage = "minimap_plaincircle"
+		}
+	},
+	ParticleNonUnique = {
+		{
+			Name = "antimage_blink_end",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
+			Name = "antimage_blade_hit",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
+			Name = "axe_beserkers_call_owner",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
+			Name = "bounty_hunter_hand_l",
+			TrackDuration = 1,
+			Duration = 2,
+			HasMessage = false
+		},
+		{
+			Name = "clinkz_death_pact_buff",
+			TrackDuration = 1,
+			Duration = 3,
+			HasMessage = true,
+			Message = "Death pact is being used."
+		},
+		{
+			Name = "clinkz_windwalk",
+			TrackDuration = 1,
+			Duration = 4,
+			HasMessage = true,
+			Message = "clinkz_windwalk is being used."
+		},
+		{
+			Name = "mirana_moonlight_cast",
+			TrackDuration = 1,
+			Duration = 5,
+			HasMessage = true,
+			Message = "Enemy using Moonlight Shadow."
+		},
+		{
+			Name = "legion_commander_courage_hit",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
+			Name = "necrolyte_sadist",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
+			Name = "nevermore_necro_souls",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
+			Name = "tinker_rearm",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
+			Name = "invoker_exort_orb",
+			TrackDuration = 1,
+			Duration = 1,
+			HasMessage = false
+		},
+		{
+			Name = "invoker_quas_orb",
+			TrackDuration = 1,
+			Duration = 1,
+			HasMessage = false
+		},
+		{
+			Name = "invoker_wex_orb",
+			TrackDuration = 1,
+			Duration = 1,
+			HasMessage = false
+		},
+		{
+			Name = "riki_blink_strike",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
+			Name = "doom_bringer_devour",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		}
+	},
+	GetParticleUpdateZeroUnique = {
+		smoke_of_deceit = true,
+		nyx_assassin_vendetta_start = true,
+		bounty_hunter_windwalk = true,
+		roshan_slam = true
+	},
+	GetParticleUpdateEntityZero = {
+		antimage_blade_hit = true,
+		bounty_hunter_hand_l = true,
+		mirana_moonlight_cast = true
+	},
+	GetParticleUpdateEntityOne = {
+		antimage_blink_end = true,
+		axe_beserkers_call_owner = true,
+		clinkz_death_pact_buff = true,
+		clinkz_windwalk = true,
+		doom_bringer_devour = true,
+		legion_commander_courage_hit = true,
+		necrolyte_sadist = true,
+		nevermore_necro_souls = true,
+		riki_blink_strike = true,
+		tinker_rearm = true,
+		invoker_exort_orb = true,
+		invoker_quas_orb = true,
+		invoker_wex_orb = true
+	}
+}
+
 local ParticleData = {}
-ParticleData.Table = {}
-ParticleData.RoshanAttack = false 
-ParticleData.RoshanAttackNextTime = 0
 
 function AbilityAlert.OnScriptLoad()
-	for i = #ParticleData.Table, 1, -1 do
-		ParticleData.Table[i] = nil
+	for k in pairs(ParticleData) do
+		table.remove(ParticleData, k)
 	end
 	
-	ParticleData.Table = {}
-	ParticleData.RoshanAttack = false 
-	ParticleData.RoshanAttackNextTime = 0
+	ParticleData = {}
 end
 
 function AbilityAlert.OnGameStart()
-	for i = #ParticleData.Table, 1, -1 do
-		ParticleData.Table[i] = nil
+	for k in pairs(ParticleData) do
+		table.remove(ParticleData, k)
 	end
 	
-	ParticleData.Table = {}
-	ParticleData.RoshanAttack = false 
-	ParticleData.RoshanAttackNextTime = 0
+	ParticleData = {}
 end
 
 function AbilityAlert.OnGameEnd()
-	for i = #ParticleData.Table, 1, -1 do
-		ParticleData.Table[i] = nil
+	for k in pairs(ParticleData) do
+		table.remove(ParticleData, k)
 	end
 	
-	ParticleData.Table = {}
-	ParticleData.RoshanAttack = false 
-	ParticleData.RoshanAttackNextTime = 0
+	ParticleData = {}
 end
 
 function AbilityAlert.GetTime()
-	
 	local GameTime = GameRules.GetGameTime() - GameRules.GetGameStartTime()
 	local second = FunctionFloor(GameTime % 60)
+	
 	if second < 10 then
 		return FunctionFloor(GameTime * 0.016666666666667 ) .. ":0" .. second
 	else
@@ -49,446 +218,155 @@ function AbilityAlert.GetTime()
 	end
 end
 
-function AbilityAlert.OnUnitAnimation(animation)
-	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
-	if not Heroes.GetLocal() then return end
-	if animation.sequenceName == "roshan_attack" or animation.sequenceName == "roshan_attack2" then 
-		if ParticleData.RoshanAttack == false then
-			local FriendlyUnitRadiusChecker = NPCs.InRadius(Vector(-2319.4375, 1714.4375, 159.96875), 364, Entity.GetTeamNum(Heroes.GetLocal()), Enum.TeamType.TEAM_FRIEND)
-			if #FriendlyUnitRadiusChecker < 1 then
-				Chat.Print("ConsoleChat", '<font color="red"> Someone attacking roshan. </font>')
-				ParticleData.RoshanAttack = true 
-				ParticleData.RoshanAttackNextTime = os.clock() + 4
+function AbilityAlert.GetDataUnique(particle)
+	local idx = nil
+	
+	for _, v in pairs(ParticleManager.ParticleUnique) do
+		if particle.name == v.Name then
+			idx = particle.index
+			
+			if idx > -1 then
+				idx = idx * -1
 			end
+			
+			table.insert(ParticleData, {
+								index = particle.index,
+								name = v.Name,
+								TrackUntil = os.clock() + v.TrackDuration,
+								entity = particle.entity or nil,
+								PrintMessage = v.HasMessage,
+								Msg = v.Message or nil,
+								duration = v.Duration,
+								Position =  v.Position or nil,
+								DrawIcon = nil,
+								IconIndex = idx,
+								Texture = v.MinimapImage,
+								DoneDraw = false
+							}
+						)
+			
+			return true
 		end
 	end
+	return false
 end
 
-function AbilityAlert.InsertParticleTable(particle)
-
-	if particle.name == "smoke_of_deceit" and particle.entityForModifiers ~= nil then
-		ParticleData.Table[particle.index] = {
-			Index = particle.index,
-			Name = particle.name,
-			WhenToErase = os.clock() + 3.0,
-			Position = nil,
-			ShouldDraw = false,
-			Duration = 5,
-			Color = 2,
-			MinimapIndex = nil,
-			MinimapImg = "minimap_plaincircle"
-		}
-		return true
-	elseif particle.name == "antimage_blade_hit" and particle.entity ~= nil then
-		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false and Entity.IsDormant( particle.entity) == true then
-			ParticleData.Table[particle.index] = {
-				Index = particle.index,
-				Name = particle.name,
-				WhenToErase = os.clock() + 3.0,
-				Position = nil,
-				ShouldDraw = false,
-				Duration = 1,
-				Color = 1,
-				MinimapIndex = nil,
-				MinimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-			}
+function AbilityAlert.GetData(particle)
+	local idx = nil
+	
+	for _, v in pairs(ParticleManager.ParticleNonUnique) do
+		if particle.name == v.Name then
+			idx = particle.index
+			
+			if idx > -1 then
+				idx = idx * -1
+			end
+			table.insert(ParticleData, {
+								index = particle.index,
+								name = v.Name,
+								TrackUntil = os.clock() + v.TrackDuration,
+								entity = particle.entity or nil,
+								PrintMessage = v.HasMessage,
+								Msg = v.Message or nil,
+								duration = v.Duration,
+								Position = nil,
+								DrawIcon = nil,
+								IconIndex = idx,
+								Texture = nil,
+								DoneDraw = false
+							}
+						)
+			
 			return true
 		end
-	elseif particle.name == "axe_beserkers_call_owner" and particle.entity ~= nil then
-		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false and Entity.IsDormant( particle.entity) == true then
-			ParticleData.Table[particle.index] = {
-				Index = particle.index,
-				Name = particle.name,
-				WhenToErase = os.clock() + 3.0,
-				Position = nil,
-				ShouldDraw = false,
-				Duration = 1,
-				Color = 1,
-				MinimapIndex = nil,
-				MinimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-			}
-			return true
-		end
-	elseif particle.name == "clinkz_death_pact_buff" and particle.entity ~= nil then
-		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
-			ParticleData.Table[particle.index] = {
-				Index = particle.index,
-				Name = particle.name,
-				WhenToErase = os.clock() + 3.0,
-				Position = nil,
-				ShouldDraw = false,
-				Duration = 2,
-				Color = 1,
-				MinimapIndex = nil,
-				MinimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-			}
-			return true
-		end
-	elseif particle.name == "clinkz_windwalk" and particle.entity ~= nil then
-		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
-			ParticleData.Table[particle.index] = {
-				Index = particle.index,
-				Name = particle.name,
-				WhenToErase = os.clock() + 3.0,
-				Position = nil,
-				ShouldDraw = false,
-				Duration = 3,
-				Color = 1,
-				MinimapIndex = nil,
-				MinimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-			}
-			return true
-		end
-	elseif particle.name == "doom_bringer_devour" and particle.entity ~= nil then
-		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false and Entity.IsDormant( particle.entity) == true then
-			ParticleData.Table[particle.index] = {
-				Index = particle.index,
-				Name = particle.name,
-				WhenToErase = os.clock() + 3.0,
-				Position = nil,
-				ShouldDraw = false,
-				Duration = 2,
-				Color = 1,
-				MinimapIndex = nil,
-				MinimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-			}
-			return true
-		end
-	elseif particle.name == "invoker_exort_orb" and particle.entity ~= nil then
-		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false and Entity.IsDormant( particle.entity) == true then
-			--Console.Print("invoker_exort_orb")
-			ParticleData.Table[particle.index] = {
-				Index = particle.index,
-				Name = particle.name,
-				WhenToErase = os.clock() + 3.0,
-				Position = nil,
-				ShouldDraw = false,
-				Duration = 0.5,
-				Color = 1,
-				MinimapIndex = nil,
-				MinimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-			}
-			return true
-		end
-	elseif particle.name == "invoker_quas_orb" and particle.entity ~= nil then
-		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false and Entity.IsDormant( particle.entity) == true then
-			ParticleData.Table[particle.index] = {
-				Index = particle.index,
-				Name = particle.name,
-				WhenToErase = os.clock() + 3.0,
-				Position = nil,
-				ShouldDraw = false,
-				Duration = 0.5,
-				Color = 1,
-				MinimapIndex = nil,
-				MinimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-			}
-			return true
-		end
-	elseif particle.name == "invoker_wex_orb" and particle.entity ~= nil then
-		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false and Entity.IsDormant( particle.entity) == true then
-			ParticleData.Table[particle.index] = {
-				Index = particle.index,
-				Name = particle.name,
-				WhenToErase = os.clock() + 3.0,
-				Position = nil,
-				ShouldDraw = false,
-				Duration = 0.5,
-				Color = 1,
-				MinimapIndex = nil,
-				MinimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-			}
-			return true
-		end
-	elseif particle.name == "mirana_moonlight_cast" and particle.entity ~= nil then
-		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
-			ParticleData.Table[particle.index] = {
-				Index = particle.index,
-				Name = particle.name,
-				WhenToErase = os.clock() + 3.0,
-				Position = nil,
-				ShouldDraw = false,
-				Duration = 5,
-				Color = 1,
-				MinimapIndex = nil,
-				MinimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-			}
-			return true
-		end
-	elseif particle.name == "nevermore_necro_souls" and particle.entity ~= nil then
-		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
-			ParticleData.Table[particle.index] = {
-				Index = particle.index,
-				Name = particle.name,
-				WhenToErase = os.clock() + 3.0,
-				Position = nil,
-				ShouldDraw = false,
-				Duration = 1,
-				Color = 1,
-				MinimapIndex = nil,
-				MinimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-			}
-			return true
-		end
-	elseif particle.name == "nyx_assassin_vendetta_start" and particle.entityForModifiers ~= nil then
-		ParticleData.Table[particle.index] = {
-			Index = particle.index,
-			Name = particle.name,
-			WhenToErase = os.clock() + 3.0,
-			Position = nil,
-			ShouldDraw = false,
-			Duration = 5,
-			Color = 2,
-			MinimapIndex = nil,
-			MinimapImg = "minimap_plaincircle"
-		}
-		return true
-	elseif particle.name == "riki_blink_strike" and particle.entityForModifiers ~= nil then
-		if	Entity.IsSameTeam(Heroes.GetLocal(), particle.entityForModifiers) == false and Entity.IsDormant( particle.entityForModifiers) == true then
-			ParticleData.Table[particle.index] = {
-				Index = particle.index,
-				Name = particle.name,
-				WhenToErase = os.clock() + 3.0,
-				Position = nil,
-				ShouldDraw = false,
-				Duration = 1,
-				Color = 1,
-				MinimapIndex = nil,
-				MinimapImg = "minimap_heroicon_" .. NPC.GetUnitName(particle.entityForModifiers)
-			}
-			return true
-		end
-	elseif particle.name == "roshan_spawn" then
-		--MiniMap.AddIconByName(nil, "minimap_roshancamp", Vector(-2464.245, 2016.373), 255, 150, 0, 255, 5, 950)
-		Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Lime"> Roshan spawn!</font>')
-		
-		ParticleData.Table[particle.index] = {
-			Index = particle.index,
-			Name = particle.name,
-			WhenToErase = os.clock() + 3.0,
-			Position = Vector(-2464.245, 2016.373),
-			ShouldDraw = false,
-			Duration = 5,
-			Color = 3,
-			MinimapIndex = nil,
-			MinimapImg = "minimap_roshancamp"
-		}
-		return true
-	elseif particle.name == "roshan_slam" then
-		ParticleData.Table[particle.index] = {
-			Index = particle.index,
-			Name = particle.name,
-			WhenToErase = os.clock() + 3.0,
-			Position = nil,
-			ShouldDraw = false,
-			Duration = 5,
-			Color = 2,
-			MinimapIndex = nil,
-			MinimapImg = "minimap_roshancamp"
-		}
-		return true
 	end
-    return false
+	return false
 end
 
 function AbilityAlert.OnParticleCreate(particle)
+	if Engine.IsInGame() == false then return end
 	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
+	if GameRules.GetGameState() < 4 then return end
+	if GameRules.GetGameState() > 5 then return end
+	if not Heroes.GetLocal() then return end
 	
-	AbilityAlert.InsertParticleTable(particle)
-end
-
-function AbilityAlert.OnParticleUpdate(particle)
-	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
-	
-	if ParticleData.Table[particle.index] then
-		if particle.controlPoint == 0 then
-			if ParticleData.Table[particle.index].Name == "smoke_of_deceit" then
-				local firstRadiusCheck = Heroes.InRadius(particle.position, 50, Entity.GetTeamNum(Heroes.GetLocal()), Enum.TeamType.TEAM_FRIEND)
-				
-				if #firstRadiusCheck < 1 then 
-					Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red"> Smoke of Deceit is being used.</font>')
-					if particle.index > -1 then
-						ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-					else
-						ParticleData.Table[particle.index].Position = particle.index
-					end
-					
-					ParticleData.Table[particle.index].Position = particle.position
-				end
-			elseif ParticleData.Table[particle.index].Name == "nyx_assassin_vendetta_start" then
-				local firstRadiusCheck = NPCs.InRadius(particle.position, 50, Entity.GetTeamNum(Heroes.GetLocal()), Enum.TeamType.TEAM_FRIEND)
-				
-				if #firstRadiusCheck < 1 then 
-					Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red"> Vendetta is being used.</font>')
-					
-					if particle.index > -1 then
-						ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-					else
-						ParticleData.Table[particle.index].Position = particle.index
-					end
-					
-					ParticleData.Table[particle.index].Position = particle.position
-				end
-			elseif ParticleData.Table[particle.index].Name == "roshan_slam" then
-				local FriendlyUnitRadiusChecker = NPCs.InRadius(Vector(-2319.4375, 1714.4375, 159.96875), 364, Entity.GetTeamNum(Heroes.GetLocal()), Enum.TeamType.TEAM_FRIEND)
-				
-				if #FriendlyUnitRadiusChecker < 1 then
-					Chat.Print("ConsoleChat", '<font color="red"> Someone attacking roshan, Roshan Slam. </font>')
-					
-					if particle.index > -1 then
-						ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-					else
-						ParticleData.Table[particle.index].Position = particle.index
-					end
-					
-					ParticleData.Table[particle.index].Position = particle.position
-				end
-			end
-		end
+	if AbilityAlert.GetData(particle) == false then
+		AbilityAlert.GetDataUnique(particle)
 	end
 end
 
-function AbilityAlert.OnParticleUpdateEntity(particle)
+function AbilityAlert.OnParticleUpdate(particle)
+	if Engine.IsInGame() == false then return end
 	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
-	
-	if ParticleData.Table[particle.index] then
-		if particle.controlPoint == 0 then
-			if ParticleData.Table[particle.index].Name == "antimage_blade_hit" then
-				ParticleData.Table[particle.index].Position = particle.position
-			elseif ParticleData.Table[particle.index].Name == "mirana_moonlight_cast" then
-				Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red"> Enemy using Moonlight Shadow </font>')
-				
-				if particle.index > -1 then
-					ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-				else
-					ParticleData.Table[particle.index].Position = particle.index
+	if GameRules.GetGameState() < 4 then return end
+	if GameRules.GetGameState() > 5 then return end
+
+    for keyTable, tableValue in pairs(ParticleData) do
+        if tableValue ~= nil and particle.index == tableValue.index then
+			if particle.controlPoint == 0 then
+				if ParticleManager.GetParticleUpdateZeroUnique[tableValue.name] then
+					if tableValue.Position == nil then
+						local FriendlyUnit = Heroes.InRadius(particle.position, 50, Entity.GetTeamNum(Heroes.GetLocal()), Enum.TeamType.TEAM_FRIEND)
+						
+						if #FriendlyUnit < 1 then 
+							tableValue.Position = particle.position
+						end
+					end
 				end
-				
-				ParticleData.Table[particle.index].Position = particle.position
 			end
-		elseif particle.controlPoint == 1 then
-			if ParticleData.Table[particle.index].Name == "axe_beserkers_call_owner" then
-				if particle.index > -1 then
-					ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-				else
-					ParticleData.Table[particle.index].Position = particle.index
-				end
-				
-				ParticleData.Table[particle.index].Position = particle.position
-			elseif ParticleData.Table[particle.index].Name == "clinkz_death_pact_buff" then
-				if particle.index > -1 then
-					ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-				else
-					ParticleData.Table[particle.index].Position = particle.index
-				end
-				
-				ParticleData.Table[particle.index].Position = particle.position
-			elseif ParticleData.Table[particle.index].Name == "clinkz_windwalk" then
-				Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red"> Windwalk is being used.</font>')
-				
-				if particle.index > -1 then
-					ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-				else
-					ParticleData.Table[particle.index].Position = particle.index
-				end
-				
-				ParticleData.Table[particle.index].Position = particle.position
-			elseif ParticleData.Table[particle.index].Name == "doom_bringer_devour" then
-				if particle.index > -1 then
-					ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-				else
-					ParticleData.Table[particle.index].Position = particle.index
-				end
-				
-				ParticleData.Table[particle.index].Position = particle.position
-			elseif ParticleData.Table[particle.index].Name == "invoker_exort_orb" then
-				if particle.index > -1 then
-					ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-				else
-					ParticleData.Table[particle.index].Position = particle.index
-				end
-				
-				ParticleData.Table[particle.index].Position = particle.position
-			elseif ParticleData.Table[particle.index].Name == "invoker_quas_orb" then
-				if particle.index > -1 then
-					ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-				else
-					ParticleData.Table[particle.index].Position = particle.index
-				end
-				
-				ParticleData.Table[particle.index].Position = particle.position
-			elseif ParticleData.Table[particle.index].Name == "invoker_wex_orb" then
-				if particle.index > -1 then
-					ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-				else
-					ParticleData.Table[particle.index].Position = particle.index
-				end
-				
-				ParticleData.Table[particle.index].Position = particle.position
-			elseif ParticleData.Table[particle.index].Name == "nevermore_necro_souls" then
-				if particle.index > -1 then
-					ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-				else
-					ParticleData.Table[particle.index].Position = particle.index
-				end
-				
-				ParticleData.Table[particle.index].Position = particle.position
-			elseif ParticleData.Table[particle.index].Name == "riki_blink_strike" then
-				if particle.index > -1 then
-					ParticleData.Table[particle.index].MinimapIndex = -1 * particle.index
-				else
-					ParticleData.Table[particle.index].Position = particle.index
-				end
-				
-				ParticleData.Table[particle.index].Position = particle.position
-			end
-		end
-		
+        end
     end
 end
 
-function AbilityAlert.OnParticleDestroy(particle)
+function AbilityAlert.OnParticleUpdateEntity(particle)
+	if Engine.IsInGame() == false then return end
 	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
-	
-	ParticleData.Table[particle.index] = nil
-end
+	if GameRules.GetGameState() < 4 then return end
+	if GameRules.GetGameState() > 5 then return end
 
+    for keyTable, tableValue in pairs(ParticleData) do
+        if particle.index == tableValue.index and particle.entity ~= nil then
+			if particle.controlPoint == 0 and ParticleManager.GetParticleUpdateEntityZero[tableValue.name] then
+				if tableValue.Position == nil and Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
+					
+					tableValue.Texture = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+					tableValue.Position = particle.position
+				
+				end
+			end
+			
+			if particle.controlPoint == 1 and ParticleManager.GetParticleUpdateEntityOne[tableValue.name] then
+				if tableValue.Position == nil and Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
+					tableValue.Texture = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+					tableValue.Position = particle.position
+				end
+			end
+        end
+    end
+end
 
 function AbilityAlert.OnDraw()
 	if Engine.IsInGame() == false then return end
 	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
 	if GameRules.GetGameState() < 4 then return end
 	if GameRules.GetGameState() > 5 then return end
+	if not Heroes.GetLocal() then return end
 	
-	local myHero = Heroes.GetLocal()
-	
-	if not myHero then return end
-	
-	for i, value in pairs(ParticleData.Table) do
-		if value then
-			if value.WhenToErase <= os.clock() then
-				ParticleData.Table[i] = nil
+	for keyTable, tableValue in pairs(ParticleData) do
+		if tableValue ~= nil then
+			if tableValue.TrackUntil - os.clock() < 0 then
+				table.remove(ParticleData, keyTable)
 			end
 			
-			if value.ShouldDraw == false and value.Position ~= nil then
-				if value.Color == 1 then
-					MiniMap.AddIconByName(value.MinimapIndex, value.MinimapImg, value.Position, 255, 255, 255, 255, value.Duration, 950)
-				elseif value.Color == 2 then
-					MiniMap.AddIconByName(value.MinimapIndex, value.MinimapImg, value.Position, 255, 0, 0, 255, value.Duration, 950)
-				else
-					MiniMap.AddIconByName(value.MinimapIndex, value.MinimapImg, value.Position, 255, 150, 0, 255, value.Duration, 950)
+			if tableValue.Position ~= nil and tableValue.DoneDraw == false then
+				MiniMap.AddIconByName(tableValue.IconIndex, tableValue.Texture, tableValue.Position, 255, 255, 255, 255, tableValue.duration, 900)
+				
+				if tableValue.PrintMessage then
+					Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red">'.. tableValue.Msg .. '</font>')
 				end
-				value.ShouldDraw = true
+				
+				tableValue.DoneDraw = true
 			end
-		end
-	end
-	
-	if ParticleData.RoshanAttack then
-		if ParticleData.RoshanAttackNextTime < os.clock() then
-			ParticleData.RoshanAttackNextTime = 0 
-			ParticleData.RoshanAttack = false
-		else
-			MiniMap.AddIconByName(nil, "minimap_plaincircle", Vector(-2464.245, 2016.373), 255, 0, 0, 255, 1, 600)
 		end
 	end
 end
