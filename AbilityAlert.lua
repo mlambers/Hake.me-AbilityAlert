@@ -185,7 +185,7 @@ local ParticleData = {}
 
 function AbilityAlert.OnScriptLoad()
 	for k in pairs(ParticleData) do
-		table.remove(ParticleData, k)
+		ParticleData[k] = nil
 	end
 	
 	ParticleData = {}
@@ -193,7 +193,7 @@ end
 
 function AbilityAlert.OnGameStart()
 	for k in pairs(ParticleData) do
-		table.remove(ParticleData, k)
+		ParticleData[k] = nil
 	end
 	
 	ParticleData = {}
@@ -201,7 +201,7 @@ end
 
 function AbilityAlert.OnGameEnd()
 	for k in pairs(ParticleData) do
-		table.remove(ParticleData, k)
+		ParticleData[k] = nil
 	end
 	
 	ParticleData = {}
@@ -355,7 +355,7 @@ function AbilityAlert.OnDraw()
 	for keyTable, tableValue in pairs(ParticleData) do
 		if tableValue ~= nil then
 			if tableValue.TrackUntil - os.clock() < 0 then
-				table.remove(ParticleData, keyTable)
+				ParticleData[keyTable] = nil
 			end
 			
 			if tableValue.Position ~= nil and tableValue.DoneDraw == false then
