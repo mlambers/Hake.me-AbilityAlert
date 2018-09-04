@@ -6,8 +6,6 @@ local AbilityAlert = {}
 
 AbilityAlert.optionEnable = Menu.AddOption({"mlambers", "Ability Alert"}, "1. Enable", "Enable this script.")
 
-local FunctionFloor = math.floor
-
 local ParticleManager = {
 	ParticleUnique = {
 		{
@@ -54,13 +52,13 @@ local ParticleManager = {
 	},
 	ParticleNonUnique = {
 		{
-			Name = "antimage_blink_end",
+			Name = "antimage_blade_hit",
 			TrackDuration = 1,
-			Duration = 1.5,
+			Duration = 1.2,
 			HasMessage = false
 		},
 		{
-			Name = "antimage_blade_hit",
+			Name = "antimage_blink_end",
 			TrackDuration = 1,
 			Duration = 1.5,
 			HasMessage = false
@@ -92,37 +90,6 @@ local ParticleManager = {
 			Message = "clinkz_windwalk is being used."
 		},
 		{
-			Name = "mirana_moonlight_cast",
-			TrackDuration = 1,
-			Duration = 5,
-			HasMessage = true,
-			Message = "Enemy using Moonlight Shadow."
-		},
-		{
-			Name = "legion_commander_courage_hit",
-			TrackDuration = 1,
-			Duration = 1.5,
-			HasMessage = false
-		},
-		{
-			Name = "necrolyte_sadist",
-			TrackDuration = 1,
-			Duration = 1.5,
-			HasMessage = false
-		},
-		{
-			Name = "nevermore_necro_souls",
-			TrackDuration = 1,
-			Duration = 1.5,
-			HasMessage = false
-		},
-		{
-			Name = "tinker_rearm",
-			TrackDuration = 1,
-			Duration = 1.5,
-			HasMessage = false
-		},
-		{
 			Name = "invoker_exort_orb",
 			TrackDuration = 1,
 			Duration = 1,
@@ -141,7 +108,38 @@ local ParticleManager = {
 			HasMessage = false
 		},
 		{
+			Name = "legion_commander_courage_hit",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
+			Name = "mirana_moonlight_cast",
+			TrackDuration = 1,
+			Duration = 5,
+			HasMessage = true,
+			Message = "Enemy using Moonlight Shadow."
+		},
+		{
+			Name = "necrolyte_sadist",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
+			Name = "nevermore_necro_souls",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
 			Name = "riki_blink_strike",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
+			Name = "tinker_rearm",
 			TrackDuration = 1,
 			Duration = 1.5,
 			HasMessage = false
@@ -154,10 +152,10 @@ local ParticleManager = {
 		}
 	},
 	GetParticleUpdateZeroUnique = {
-		smoke_of_deceit = true,
-		nyx_assassin_vendetta_start = true,
 		bounty_hunter_windwalk = true,
-		roshan_slam = true
+		nyx_assassin_vendetta_start = true,
+		roshan_slam = true,
+		smoke_of_deceit = true
 	},
 	GetParticleUpdateEntityZero = {
 		antimage_blade_hit = true,
@@ -170,41 +168,48 @@ local ParticleManager = {
 		clinkz_death_pact_buff = true,
 		clinkz_windwalk = true,
 		doom_bringer_devour = true,
+		invoker_exort_orb = true,
+		invoker_quas_orb = true,
+		invoker_wex_orb = true,
 		legion_commander_courage_hit = true,
 		necrolyte_sadist = true,
 		nevermore_necro_souls = true,
 		riki_blink_strike = true,
-		tinker_rearm = true,
-		invoker_exort_orb = true,
-		invoker_quas_orb = true,
-		invoker_wex_orb = true
+		tinker_rearm = true
 	}
 }
 
+local FunctionFloor = math.floor
 local ParticleData = {}
 
 function AbilityAlert.OnScriptLoad()
-	for k in pairs(ParticleData) do
+	for i = #ParticleData, 1, -1 do
 		ParticleData[k] = nil
 	end
 	
 	ParticleData = {}
+	
+	Console.Print("AbilityAlert.OnScriptLoad()")
 end
 
 function AbilityAlert.OnGameStart()
-	for k in pairs(ParticleData) do
+	for i = #ParticleData, 1, -1 do
 		ParticleData[k] = nil
 	end
 	
 	ParticleData = {}
+	
+	Console.Print("AbilityAlert.OnGameStart()")
 end
 
 function AbilityAlert.OnGameEnd()
-	for k in pairs(ParticleData) do
+	for i = #ParticleData, 1, -1 do
 		ParticleData[k] = nil
 	end
 	
 	ParticleData = {}
+	
+	Console.Print("AbilityAlert.OnGameEnd()")
 end
 
 function AbilityAlert.GetTime()
@@ -261,6 +266,7 @@ function AbilityAlert.GetData(particle)
 			if idx > -1 then
 				idx = idx * -1
 			end
+			
 			table.insert(ParticleData, {
 								index = particle.index,
 								name = v.Name,
@@ -284,11 +290,8 @@ function AbilityAlert.GetData(particle)
 end
 
 function AbilityAlert.OnParticleCreate(particle)
-	if Engine.IsInGame() == false then return end
 	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
-	if GameRules.GetGameState() < 4 then return end
-	if GameRules.GetGameState() > 5 then return end
-	if not Heroes.GetLocal() then return end
+	if Heroes.GetLocal() == nil then return end
 	
 	if AbilityAlert.GetData(particle) == false then
 		AbilityAlert.GetDataUnique(particle)
@@ -296,12 +299,13 @@ function AbilityAlert.OnParticleCreate(particle)
 end
 
 function AbilityAlert.OnParticleUpdate(particle)
-	if Engine.IsInGame() == false then return end
 	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
-	if GameRules.GetGameState() < 4 then return end
-	if GameRules.GetGameState() > 5 then return end
-
-    for keyTable, tableValue in pairs(ParticleData) do
+	if Heroes.GetLocal() == nil then return end
+	
+	local tableValue = nil
+    
+	for i = 1, #ParticleData do
+		tableValue = ParticleData[i]
         if tableValue ~= nil and particle.index == tableValue.index then
 			if particle.controlPoint == 0 then
 				if ParticleManager.GetParticleUpdateZeroUnique[tableValue.name] then
@@ -309,7 +313,7 @@ function AbilityAlert.OnParticleUpdate(particle)
 						local FriendlyUnit = Heroes.InRadius(particle.position, 50, Entity.GetTeamNum(Heroes.GetLocal()), Enum.TeamType.TEAM_FRIEND)
 						
 						if #FriendlyUnit < 1 then 
-							tableValue.Position = particle.position
+							ParticleData[i].Position = particle.position
 						end
 					end
 				end
@@ -319,26 +323,27 @@ function AbilityAlert.OnParticleUpdate(particle)
 end
 
 function AbilityAlert.OnParticleUpdateEntity(particle)
-	if Engine.IsInGame() == false then return end
 	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
-	if GameRules.GetGameState() < 4 then return end
-	if GameRules.GetGameState() > 5 then return end
-
-    for keyTable, tableValue in pairs(ParticleData) do
-        if particle.index == tableValue.index and particle.entity ~= nil then
+	if Heroes.GetLocal() == nil then return end
+	
+	local tableValue = nil
+    
+	for i = 1, #ParticleData do
+		tableValue = ParticleData[i]
+        if tableValue ~= nil and particle.index == tableValue.index and particle.entity ~= nil then
 			if particle.controlPoint == 0 and ParticleManager.GetParticleUpdateEntityZero[tableValue.name] then
 				if tableValue.Position == nil and Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
 					
-					tableValue.Texture = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-					tableValue.Position = particle.position
+					ParticleData[i].Texture = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+					ParticleData[i].Position = particle.position
 				
 				end
 			end
 			
 			if particle.controlPoint == 1 and ParticleManager.GetParticleUpdateEntityOne[tableValue.name] then
 				if tableValue.Position == nil and Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
-					tableValue.Texture = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-					tableValue.Position = particle.position
+					ParticleData[i].Texture = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+					ParticleData[i].Position = particle.position
 				end
 			end
         end
@@ -348,14 +353,15 @@ end
 function AbilityAlert.OnDraw()
 	if Engine.IsInGame() == false then return end
 	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
-	if GameRules.GetGameState() < 4 then return end
-	if GameRules.GetGameState() > 5 then return end
-	if not Heroes.GetLocal() then return end
+	if Heroes.GetLocal() == nil then return end
 	
-	for keyTable, tableValue in pairs(ParticleData) do
+	local tableValue = nil
+
+	for i = 1, #ParticleData do
+		tableValue = ParticleData[i]
 		if tableValue ~= nil then
-			if tableValue.TrackUntil - os.clock() < 0 then
-				ParticleData[keyTable] = nil
+			if (tableValue.TrackUntil - os.clock()) < 0 then
+				ParticleData[i] = nil
 			end
 			
 			if tableValue.Position ~= nil and tableValue.DoneDraw == false then
@@ -365,7 +371,7 @@ function AbilityAlert.OnDraw()
 					Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red">'.. tableValue.Msg .. '</font>')
 				end
 				
-				tableValue.DoneDraw = true
+				ParticleData[i].DoneDraw = true
 			end
 		end
 	end
