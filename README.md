@@ -1,4 +1,4 @@
-# Hake.me-AbilityAlert Version 0.5
+# Hake.me-AbilityAlert Version 0.5a
 
 # Features!
   - Draw on the minimap when certain Abilities being used.
@@ -46,6 +46,8 @@
             * Vendetta
        12. Rikimaru
             * Blink strike
-	   13. Tinker
+	   13. Techies
+	        * Remote mine
+	   14. Tinker
 			* Rearm
        

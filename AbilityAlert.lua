@@ -1,6 +1,6 @@
----------------------------------
---- Ability Alert Version 0.5 ---
----------------------------------
+----------------------------------
+--- Ability Alert Version 0.5a ---
+----------------------------------
 
 local AbilityAlert = {}
 
@@ -139,6 +139,12 @@ local ParticleManager = {
 			HasMessage = false
 		},
 		{
+			Name = "techies_remote_mine_plant",
+			TrackDuration = 1,
+			Duration = 1.5,
+			HasMessage = false
+		},
+		{
 			Name = "tinker_rearm",
 			TrackDuration = 1,
 			Duration = 1.5,
@@ -160,7 +166,8 @@ local ParticleManager = {
 	GetParticleUpdateEntityZero = {
 		antimage_blade_hit = true,
 		bounty_hunter_hand_l = true,
-		mirana_moonlight_cast = true
+		mirana_moonlight_cast = true,
+		techies_remote_mine_plant = true
 	},
 	GetParticleUpdateEntityOne = {
 		antimage_blink_end = true,
