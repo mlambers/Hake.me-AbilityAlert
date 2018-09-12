@@ -1,5 +1,5 @@
 ----------------------------------
---- Ability Alert Version 0.5a ---
+--- Ability Alert Version 0.5b ---
 ----------------------------------
 
 local AbilityAlert = {}
@@ -188,33 +188,48 @@ local ParticleManager = {
 
 local FunctionFloor = math.floor
 local ParticleData = {}
+local TabValOnParticleUpdate = nil
+local TabValOnParticleUpdateEnt = nil
+local TabValOnDraw = nil
 
 function AbilityAlert.OnScriptLoad()
 	for i = #ParticleData, 1, -1 do
-		ParticleData[k] = nil
+		ParticleData[i] = nil
 	end
 	
 	ParticleData = {}
+	
+	TabValOnParticleUpdate = nil
+	TabValOnParticleUpdateEnt = nil
+	TabValOnDraw = nil
 	
 	Console.Print("AbilityAlert.OnScriptLoad()")
 end
 
 function AbilityAlert.OnGameStart()
 	for i = #ParticleData, 1, -1 do
-		ParticleData[k] = nil
+		ParticleData[i] = nil
 	end
 	
 	ParticleData = {}
+	
+	TabValOnParticleUpdate = nil
+	TabValOnParticleUpdateEnt = nil
+	TabValOnDraw = nil
 	
 	Console.Print("AbilityAlert.OnGameStart()")
 end
 
 function AbilityAlert.OnGameEnd()
 	for i = #ParticleData, 1, -1 do
-		ParticleData[k] = nil
+		ParticleData[i] = nil
 	end
 	
 	ParticleData = {}
+	
+	TabValOnParticleUpdate = nil
+	TabValOnParticleUpdateEnt = nil
+	TabValOnDraw = nil
 	
 	Console.Print("AbilityAlert.OnGameEnd()")
 end
@@ -233,7 +248,9 @@ end
 function AbilityAlert.GetDataUnique(particle)
 	local idx = nil
 	
-	for _, v in pairs(ParticleManager.ParticleUnique) do
+	for i = #ParticleManager.ParticleUnique, 1, -1 do
+		local v = ParticleManager.ParticleUnique[i]
+		
 		if particle.name == v.Name then
 			idx = particle.index
 			
@@ -241,22 +258,23 @@ function AbilityAlert.GetDataUnique(particle)
 				idx = idx * -1
 			end
 			
-			table.insert(ParticleData, {
-								index = particle.index,
-								name = v.Name,
-								TrackUntil = os.clock() + v.TrackDuration,
-								entity = particle.entity or nil,
-								PrintMessage = v.HasMessage,
-								Msg = v.Message or nil,
-								duration = v.Duration,
-								Position =  v.Position or nil,
-								DrawIcon = nil,
-								IconIndex = idx,
-								Texture = v.MinimapImage,
-								DoneDraw = false
-							}
-						)
-			
+			table.insert(
+				ParticleData, 
+				{
+					index = particle.index,
+					name = v.Name,
+					TrackUntil = os.clock() + v.TrackDuration,
+					entity = particle.entity or nil,
+					PrintMessage = v.HasMessage,
+					Msg = v.Message or nil,
+					duration = v.Duration,
+					Position =  v.Position or nil,
+					DrawIcon = nil,
+					IconIndex = idx,
+					Texture = v.MinimapImage,
+					DoneDraw = false
+				}
+			)
 			return true
 		end
 	end
@@ -266,7 +284,9 @@ end
 function AbilityAlert.GetData(particle)
 	local idx = nil
 	
-	for _, v in pairs(ParticleManager.ParticleNonUnique) do
+	for i = #ParticleManager.ParticleNonUnique, 1, -1 do
+		local v = ParticleManager.ParticleNonUnique[i]
+
 		if particle.name == v.Name then
 			idx = particle.index
 			
@@ -274,21 +294,23 @@ function AbilityAlert.GetData(particle)
 				idx = idx * -1
 			end
 			
-			table.insert(ParticleData, {
-								index = particle.index,
-								name = v.Name,
-								TrackUntil = os.clock() + v.TrackDuration,
-								entity = particle.entity or nil,
-								PrintMessage = v.HasMessage,
-								Msg = v.Message or nil,
-								duration = v.Duration,
-								Position = nil,
-								DrawIcon = nil,
-								IconIndex = idx,
-								Texture = nil,
-								DoneDraw = false
-							}
-						)
+			table.insert(
+				ParticleData, 
+				{
+					index = particle.index,
+					name = v.Name,
+					TrackUntil = os.clock() + v.TrackDuration,
+					entity = particle.entity or nil,
+					PrintMessage = v.HasMessage,
+					Msg = v.Message or nil,
+					duration = v.Duration,
+					Position = nil,
+					DrawIcon = nil,
+					IconIndex = idx,
+					Texture = nil,
+					DoneDraw = false
+				}
+			)
 			
 			return true
 		end
@@ -309,14 +331,13 @@ function AbilityAlert.OnParticleUpdate(particle)
 	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
 	if Heroes.GetLocal() == nil then return end
 	
-	local tableValue = nil
-    
 	for i = 1, #ParticleData do
-		tableValue = ParticleData[i]
-        if tableValue ~= nil and particle.index == tableValue.index then
+		TabValOnParticleUpdate = ParticleData[i]
+		
+        if TabValOnParticleUpdate ~= nil and particle.index == TabValOnParticleUpdate.index then
 			if particle.controlPoint == 0 then
-				if ParticleManager.GetParticleUpdateZeroUnique[tableValue.name] then
-					if tableValue.Position == nil then
+				if ParticleManager.GetParticleUpdateZeroUnique[TabValOnParticleUpdate.name] then
+					if TabValOnParticleUpdate.Position == nil then
 						local FriendlyUnit = Heroes.InRadius(particle.position, 50, Entity.GetTeamNum(Heroes.GetLocal()), Enum.TeamType.TEAM_FRIEND)
 						
 						if #FriendlyUnit < 1 then 
@@ -332,14 +353,13 @@ end
 function AbilityAlert.OnParticleUpdateEntity(particle)
 	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
 	if Heroes.GetLocal() == nil then return end
-	
-	local tableValue = nil
     
 	for i = 1, #ParticleData do
-		tableValue = ParticleData[i]
-        if tableValue ~= nil and particle.index == tableValue.index and particle.entity ~= nil then
-			if particle.controlPoint == 0 and ParticleManager.GetParticleUpdateEntityZero[tableValue.name] then
-				if tableValue.Position == nil and Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
+		TabValOnParticleUpdateEnt = ParticleData[i]
+		
+        if TabValOnParticleUpdateEnt ~= nil and particle.index == TabValOnParticleUpdateEnt.index and particle.entity ~= nil then
+			if particle.controlPoint == 0 and ParticleManager.GetParticleUpdateEntityZero[TabValOnParticleUpdateEnt.name] then
+				if TabValOnParticleUpdateEnt.Position == nil and Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
 					
 					ParticleData[i].Texture = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
 					ParticleData[i].Position = particle.position
@@ -347,8 +367,8 @@ function AbilityAlert.OnParticleUpdateEntity(particle)
 				end
 			end
 			
-			if particle.controlPoint == 1 and ParticleManager.GetParticleUpdateEntityOne[tableValue.name] then
-				if tableValue.Position == nil and Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
+			if particle.controlPoint == 1 and ParticleManager.GetParticleUpdateEntityOne[TabValOnParticleUpdateEnt.name] then
+				if TabValOnParticleUpdateEnt.Position == nil and Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
 					ParticleData[i].Texture = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
 					ParticleData[i].Position = particle.position
 				end
@@ -361,21 +381,20 @@ function AbilityAlert.OnDraw()
 	if Engine.IsInGame() == false then return end
 	if Menu.IsEnabled(AbilityAlert.optionEnable) == false then return end
 	if Heroes.GetLocal() == nil then return end
-	
-	local tableValue = nil
 
 	for i = 1, #ParticleData do
-		tableValue = ParticleData[i]
-		if tableValue ~= nil then
-			if (tableValue.TrackUntil - os.clock()) < 0 then
+		TabValOnDraw = ParticleData[i]
+		
+		if TabValOnDraw ~= nil then
+			if (TabValOnDraw.TrackUntil - os.clock()) < 0 then
 				ParticleData[i] = nil
 			end
 			
-			if tableValue.Position ~= nil and tableValue.DoneDraw == false then
-				MiniMap.AddIconByName(tableValue.IconIndex, tableValue.Texture, tableValue.Position, 255, 255, 255, 255, tableValue.duration, 900)
+			if TabValOnDraw.Position ~= nil and TabValOnDraw.DoneDraw == false then
+				MiniMap.AddIconByName(TabValOnDraw.IconIndex, TabValOnDraw.Texture, TabValOnDraw.Position, 255, 255, 255, 255, TabValOnDraw.duration, 900)
 				
-				if tableValue.PrintMessage then
-					Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red">'.. tableValue.Msg .. '</font>')
+				if TabValOnDraw.PrintMessage then
+					Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red">'.. TabValOnDraw.Msg .. '</font>')
 				end
 				
 				ParticleData[i].DoneDraw = true
