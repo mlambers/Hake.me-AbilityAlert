@@ -1,6 +1,6 @@
----------------------------------
---- Ability Alert Version 0.6 ---
----------------------------------
+------------------------------------
+--- AbilityAlert.lua Version 0.7 ---
+------------------------------------
 
 local AbilityAlert  = {}
 
@@ -14,151 +14,129 @@ AbilityAlert.OptionEnable = Menu.AddOption({"mlambers", "Ability Alert"}, "1. En
 	Array index number 5 represent GetParticleUpdateEntityOne.
 --]]
 local ParticleManager = {
-	{
-		{
-			Name = "roshan_spawn",
-			TrackDuration = 1,
-			Duration = 4,
-			HasMessage = true,
-			Message = "Roshan spawn!",
-			Position = Vector(-2464.245, 2016.373),
-			MinimapImage = "minimap_roshancamp"
+	{	
+		["roshan_spawn"] = {
+			["TrackDuration"] = 1,
+			["Duration"] = 4,
+			["HasMessage"] = true,
+			["Message"] = " Roshan spawn!",
+			["Position"] = Vector(-2464.245, 2016.373),
+			["MinimapImage"] = "minimap_roshancamp"
 		},
-		{
-			Name = "roshan_slam",
-			TrackDuration = 1,
-			Duration = 4,
-			HasMessage = true,
-			Message = "Someone attack Roshan.",
-			MinimapImage = "minimap_roshancamp"
+		["roshan_slam"] = {
+			["TrackDuration"] = 1,
+			["Duration"] = 4,
+			["HasMessage"] = true,
+			["Message"] = " Someone attack Roshan.",
+			["MinimapImage"] = "minimap_roshancamp"
 		},
-		{
-			Name = "bounty_hunter_windwalk",
-			TrackDuration = 1,
-			Duration = 4,
-			HasMessage = true,
-			Message = "bounty_hunter_windwalk is being used.",
-			MinimapImage = "minimap_plaincircle"
+		["bounty_hunter_windwalk"] = {
+			["TrackDuration"] = 1,
+			["Duration"] = 4,
+			["HasMessage"] = true,
+			["Message"] = "bounty_hunter_windwalk is being used. ",
+			["MinimapImage"] = "minimap_plaincircle"
 		},
-		{
-			Name = "smoke_of_deceit",
-			TrackDuration = 1,
-			Duration = 4,
-			HasMessage = true,
-			Message = "Smoke of Deceit is being used.",
-			MinimapImage = "minimap_plaincircle"
+		["smoke_of_deceit"] = {
+			["TrackDuration"] = 1,
+			["Duration"] = 4,
+			["HasMessage"] = true,
+			["Message"] = "Smoke of Deceit is being used.",
+			["MinimapImage"] = "minimap_plaincircle"
 		},
-		{
-			Name = "nyx_assassin_vendetta_start",
-			TrackDuration = 1,
-			Duration = 4,
-			HasMessage = true,
-			Message = "Vendetta is being used.",
-			MinimapImage = "minimap_plaincircle"
+		["nyx_assassin_vendetta_start"] = {
+			["TrackDuration"] = 1,
+			["Duration"] = 4,
+			["HasMessage"] = true,
+			["Message"] = "Vendetta is being used.",
+			["MinimapImage"] = "minimap_plaincircle"
 		}
 	},
 	{
-		{
-			Name = "antimage_blade_hit",
+		["antimage_blade_hit"] = {
 			TrackDuration = 1,
 			Duration = 1.2,
 			HasMessage = false
 		},
-		{
-			Name = "antimage_blink_end",
+		["antimage_blink_end"] = {
 			TrackDuration = 1,
 			Duration = 1.5,
 			HasMessage = false
 		},
-		{
-			Name = "axe_beserkers_call_owner",
+		["axe_beserkers_call_owner"] = {
 			TrackDuration = 1,
 			Duration = 1.5,
 			HasMessage = false
 		},
-		{
-			Name = "bounty_hunter_hand_l",
+		["bounty_hunter_hand_l"] = {
 			TrackDuration = 1,
 			Duration = 2,
 			HasMessage = false
 		},
-		{
-			Name = "clinkz_death_pact_buff",
+		["clinkz_death_pact_buff"] = {
 			TrackDuration = 1,
 			Duration = 3,
 			HasMessage = true,
 			Message = "Death pact is being used."
 		},
-		{
-			Name = "clinkz_windwalk",
+		["clinkz_windwalk"] = {
 			TrackDuration = 1,
 			Duration = 4,
 			HasMessage = true,
 			Message = "clinkz_windwalk is being used."
 		},
-		{
-			Name = "invoker_exort_orb",
+		["invoker_exort_orb"] = {
 			TrackDuration = 1,
 			Duration = 1,
 			HasMessage = false
 		},
-		{
-			Name = "invoker_quas_orb",
+		["invoker_quas_orb"] = {
 			TrackDuration = 1,
 			Duration = 1,
 			HasMessage = false
 		},
-		{
-			Name = "invoker_wex_orb",
+		["invoker_wex_orb"] = {
 			TrackDuration = 1,
 			Duration = 1,
 			HasMessage = false
 		},
-		{
-			Name = "legion_commander_courage_hit",
+		["legion_commander_courage_hit"] = {
 			TrackDuration = 1,
 			Duration = 1.5,
 			HasMessage = false
 		},
-		{
-			Name = "mirana_moonlight_cast",
+		["mirana_moonlight_cast"] = {
 			TrackDuration = 1,
 			Duration = 5,
 			HasMessage = true,
 			Message = "Enemy using Moonlight Shadow."
 		},
-		{
-			Name = "necrolyte_sadist",
+		["necrolyte_sadist"] = {
 			TrackDuration = 1,
 			Duration = 1.5,
 			HasMessage = false
 		},
-		{
-			Name = "nevermore_necro_souls",
+		["nevermore_necro_souls"] = {
 			TrackDuration = 1,
 			Duration = 1.5,
 			HasMessage = false
 		},
-		{
-			Name = "riki_blink_strike",
+		["riki_blink_strike"] = {
 			TrackDuration = 1,
 			Duration = 1.5,
 			HasMessage = false
 		},
-		{
-			Name = "techies_remote_mine_plant",
+		["techies_remote_mine_plant"] = {
 			TrackDuration = 1,
 			Duration = 1.5,
 			HasMessage = false
 		},
-		{
-			Name = "tinker_rearm",
+		["tinker_rearm"] = {
 			TrackDuration = 1,
 			Duration = 1.5,
 			HasMessage = false
 		},
-		{
-			Name = "doom_bringer_devour",
+		["doom_bringer_devour"] = {
 			TrackDuration = 1,
 			Duration = 1.5,
 			HasMessage = false
@@ -198,36 +176,32 @@ local Ceil = math.ceil
 local ValueParticleUpdate, ValueParticleUpdateEntity = nil, nil
 local idx = nil
 local TableData = nil
-local ValueOnDraw = nil
 local NeedInit = true
 local ParticleData = {}
 
 function AbilityAlert.OnScriptLoad()
-	Console.Print("\n[" .. os.date("%I:%M:%S %p") .. "] - - [ AbilityAlert.lua ] [ Version 0.6 ] Script load.\n\n")
-	for i = #ParticleData, 1, -1 do
-		ParticleData[i] = nil
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ AbilityAlert.lua ] [ Version 0.7 ] Script load.")
+	
+	for k, v in pairs( ParticleData ) do
+		ParticleData[ k ] = nil
 	end
-	ParticleData = {}
 	
 	ValueParticleUpdate = nil 
 	ValueParticleUpdateEntity = nil
-	ValueOnDraw = nil
 	idx = nil
 	TableData = nil
 	NeedInit = true
 end
 
 function AbilityAlert.OnGameEnd()
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ AbilityAlert.lua ] [ Version 0.6 ] Game end. Reset all variable.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ AbilityAlert.lua ] [ Version 0.7 ] Game end. Reset all variable.")
 	
-	for i = #ParticleData, 1, -1 do
-		ParticleData[i] = nil
+	for k, v in pairs( ParticleData ) do
+		ParticleData[ k ] = nil
 	end
-	ParticleData = {}
 	
 	ValueParticleUpdate = nil 
 	ValueParticleUpdateEntity = nil
-	ValueOnDraw = nil
 	idx = nil
 	TableData = nil
 	NeedInit = true
@@ -239,38 +213,34 @@ end
 	This function try to check if particle present in the unique particle table mapping, ParticleManager table index 1 for unique particle.
 --]]
 function AbilityAlert.IsUniqueParticle(particle)
-	idx = nil
-	TableData = nil
-	
-	for i = 1, #ParticleManager[1] do
-		TableData = ParticleManager[1][i]
-		
-		if particle.name == TableData.Name then
-			if TableData.Name == "roshan_spawn" and GameRules.GetGameState() == 4 then
-				return false
-			else
-				idx = particle.index
+	if ParticleManager[1][particle.name] then
+		TableData = ParticleManager[1][particle.name]
+			
+		if particle.name == "roshan_spawn" and GameRules.GetGameState() == 4 then
+			return false
+		else
+			idx = particle.index
 				
-				if idx > -1 then
-					idx = idx * -1
-				end
-				
-				ParticleData[#ParticleData + 1] = {
-					index = particle.index,
-					name = TableData.Name,
-					TrackUntil = os.clock() + TableData.TrackDuration,
-					entity = particle.entity or nil,
-					PrintMessage = TableData.HasMessage,
-					Msg = TableData.Message or nil,
-					duration = TableData.Duration,
-					Position =  TableData.Position or nil,
-					DrawIcon = nil,
-					IconIndex = idx,
-					Texture = TableData.MinimapImage,
-					DoneDraw = false
-				}
-				return true
+			if idx > -1 then
+				idx = idx * -1
 			end
+				
+			ParticleData[tostring(particle.index)] = {
+				index = particle.index,
+				name = particle.name,
+				TrackUntil = os.clock() + TableData.TrackDuration,
+				entity = particle.entity or nil,
+				PrintMessage = TableData.HasMessage,
+				Msg = TableData.Message or nil,
+				duration = TableData.Duration,
+				Position =  TableData.Position or nil,
+				DrawIcon = nil,
+				IconIndex = idx,
+				Texture = TableData.MinimapImage,
+				DoneDraw = false
+			}
+				
+			return true
 		end
 	end
 	
@@ -281,35 +251,30 @@ end
 	This function try to check if particle present in the non unique particle table mapping, ParticleManager table index 2 for non unique particle.
 --]]
 function AbilityAlert.IsNonUniqueParticle(particle)
-	idx = nil
-	TableData = nil
-	
-	for i = 1, #ParticleManager[2] do
-		TableData = ParticleManager[2][i]
-
-		if particle.name == TableData.Name then
-			idx = particle.index
+	if ParticleManager[2][particle.name] then
+		TableData = ParticleManager[2][particle.name]
+		idx = particle.index
 			
-			if idx > -1 then
-				idx = idx * -1
-			end
-			
-			ParticleData[#ParticleData + 1] = {
-				index = particle.index,
-				name = TableData.Name,
-				TrackUntil = os.clock() + TableData.TrackDuration,
-				entity = particle.entity or nil,
-				PrintMessage = TableData.HasMessage,
-				Msg = TableData.Message or nil,
-				duration = TableData.Duration,
-				Position = nil,
-				DrawIcon = nil,
-				IconIndex = idx,
-				Texture = nil,
-				DoneDraw = false
-			}
-			return true
+		if idx > -1 then
+			idx = idx * -1
 		end
+			
+		ParticleData[tostring(particle.index)] = {
+			index = particle.index,
+			name = particle.name,
+			TrackUntil = os.clock() + TableData.TrackDuration,
+			entity = particle.entity or nil,
+			PrintMessage = TableData.HasMessage,
+			Msg = TableData.Message or nil,
+			duration = TableData.Duration,
+			Position = nil,
+			DrawIcon = nil,
+			IconIndex = idx,
+			Texture = nil,
+			DoneDraw = false
+		}
+		
+		return true
 	end
 	
 	return false
@@ -317,8 +282,8 @@ end
 
 function AbilityAlert.OnParticleCreate(particle)
 	if (Menu.IsEnabled(AbilityAlert.OptionEnable) == false) then return end
-	if NeedInit then return end
 	if (Heroes.GetLocal() == nil) then return end
+	if NeedInit then return end
 	
 	if AbilityAlert.IsNonUniqueParticle(particle) == false then
 		AbilityAlert.IsUniqueParticle(particle)
@@ -348,88 +313,59 @@ end
 
 function AbilityAlert.OnParticleUpdate(particle)
 	if (Menu.IsEnabled(AbilityAlert.OptionEnable) == false) then return end
-	if NeedInit then return end
 	if (Heroes.GetLocal() == nil) then return end
+	if NeedInit then return end
 	
-	for i = 1, #ParticleData do
-		ValueParticleUpdate = ParticleData[i] or nil
-		
-        if 
-			ValueParticleUpdate ~= nil 
-			and particle.index == ValueParticleUpdate.index 
-		then
-			if particle.controlPoint == 0 then
-				if ParticleManager[3][ValueParticleUpdate.name] then
-					if 
-						ValueParticleUpdate.Position == nil
-						and AbilityAlert.IsAlly(ValueParticleUpdate.name, particle.position) == false
-					then
-						ParticleData[i].Position = particle.position
-					end
-				end
+	ValueParticleUpdate = ParticleData[tostring(particle.index)] or nil
+	
+	if ValueParticleUpdate == nil then return end
+	
+	if particle.controlPoint == 0 then
+		if ParticleManager[3][ValueParticleUpdate.name] then
+			if 
+				ValueParticleUpdate.Position == nil
+				and AbilityAlert.IsAlly(ValueParticleUpdate.name, particle.position) == false
+			then
+				ParticleData[tostring(particle.index)].Position = particle.position
 			end
-        end
-    end
+		end
+	end
 end
 
 function AbilityAlert.OnParticleUpdateEntity(particle)
 	if Menu.IsEnabled(AbilityAlert.OptionEnable) == false then return end
-	if NeedInit then return end
 	if Heroes.GetLocal() == nil then return end
+	if NeedInit then return end
     
-	for i = 1, #ParticleData do
-		ValueParticleUpdateEntity = ParticleData[i]
-		
-        if 
-			ValueParticleUpdateEntity ~= nil 
-			and particle.index == ValueParticleUpdateEntity.index 
-			and particle.entity ~= nil 
+	ValueParticleUpdateEntity = ParticleData[tostring(particle.index)] or nil
+	
+	if ValueParticleUpdateEntity == nil then return end
+	
+	if particle.entity ~= nil then
+		if 
+			particle.controlPoint == 0 
+			and ParticleManager[4][ValueParticleUpdateEntity.name] 
+		then
+			if ValueParticleUpdateEntity.Position == nil and Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
+					
+				ParticleData[tostring(particle.index)].Texture = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+				ParticleData[tostring(particle.index)].Position = particle.position
+				
+			end
+		end
+			
+		if 
+			particle.controlPoint == 1 
+			and ParticleManager[5][ValueParticleUpdateEntity.name] 
 		then
 			if 
-				particle.controlPoint == 0 
-				and ParticleManager[4][ValueParticleUpdateEntity.name] 
+				ValueParticleUpdateEntity.Position == nil 
+				and Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false 
 			then
-				if ValueParticleUpdateEntity.Position == nil and Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false then
-					
-					ParticleData[i].Texture = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-					ParticleData[i].Position = particle.position
-				
-				end
+				ParticleData[tostring(particle.index)].Texture = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
+				ParticleData[tostring(particle.index)].Position = particle.position
 			end
-			
-			if 
-				particle.controlPoint == 1 
-				and ParticleManager[5][ValueParticleUpdateEntity.name] 
-			then
-				if 
-					ValueParticleUpdateEntity.Position == nil 
-					and Entity.IsSameTeam(Heroes.GetLocal(), particle.entity) == false 
-				then
-					ParticleData[i].Texture = "minimap_heroicon_" .. NPC.GetUnitName(particle.entity)
-					ParticleData[i].Position = particle.position
-				end
-			end
-        end
-    end
-end
-
-function AbilityAlert.OnUpdate()
-	if Menu.IsEnabled(AbilityAlert.OptionEnable) == false then return end
-	
-	if NeedInit then
-		for i = #ParticleData, 1, -1 do
-			ParticleData[i] = nil
 		end
-		ParticleData = {}
-		
-		ValueParticleUpdate = nil 
-		ValueParticleUpdateEntity = nil
-		ValueOnDraw = nil
-		idx = nil
-		TableData = nil
-		NeedInit = false
-		
-		Console.Print("\n[" .. os.date("%I:%M:%S %p") .. "] - - [ AbilityAlert.lua ] [ Version 0.6 ] Game started, init script done.\n\n")
 	end
 end
 
@@ -480,28 +416,35 @@ end
 function AbilityAlert.OnDraw()
 	if Menu.IsEnabled(AbilityAlert.OptionEnable) == false then return end
 	if Engine.IsInGame() == false then return end
-	if GameRules.GetGameState() < 4 then return end
-	if GameRules.GetGameState() > 5 then return end
-	if NeedInit then return end
 	if Heroes.GetLocal() == nil then return end
-
-	for i = 1, #ParticleData do
-		ValueOnDraw = ParticleData[i]
+	
+	if NeedInit then
+		for k, v in pairs( ParticleData ) do
+			ParticleData[ k ] = nil
+		end
 		
-		if ValueOnDraw ~= nil then
-			if (ValueOnDraw.TrackUntil - os.clock()) < 0 then
-				ParticleData[i] = nil
-			end
+		ValueParticleUpdate = nil 
+		ValueParticleUpdateEntity = nil
+		idx = nil
+		TableData = nil
+		NeedInit = false
+		
+		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ AbilityAlert.lua ] [ Version 0.7 ] Game started, init script done.")
+	end
+
+	for k, v in pairs( ParticleData ) do
+		if (v.TrackUntil - os.clock()) < 0 then
+			ParticleData[ k ] = nil
+		end
 			
-			if ValueOnDraw.Position ~= nil and ValueOnDraw.DoneDraw == false then
-				MiniMap.AddIconByName(ValueOnDraw.IconIndex, ValueOnDraw.Texture, ValueOnDraw.Position, 255, 255, 255, 255, ValueOnDraw.duration, 900)
+		if v.Position ~= nil and v.DoneDraw == false then
+			MiniMap.AddIconByName(v.IconIndex, v.Texture, v.Position, 255, 255, 255, 255, v.duration, 900)
 				
-				if ValueOnDraw.PrintMessage then
-					Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red">'.. ValueOnDraw.Msg .. '</font>')
-				end
-				
-				ParticleData[i].DoneDraw = true
+			if v.PrintMessage then
+				Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red">'.. v.Msg .. '</font>')
 			end
+				
+			ParticleData[ k ].DoneDraw = true
 		end
 	end
 end

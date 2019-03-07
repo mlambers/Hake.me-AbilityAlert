@@ -1,4 +1,4 @@
-# Hake.me-AbilityAlert Version 0.6
+# Hake.me-AbilityAlert Version 0.7
 
 # Features!
   - Draw on the minimap when certain Abilities being used.
