@@ -1,5 +1,5 @@
 ------------------------------------
---- AbilityAlert.lua Version 0.7 ---
+--- AbilityAlert.lua Version 0.8 ---
 ------------------------------------
 
 local AbilityAlert  = {}
@@ -34,21 +34,21 @@ local ParticleManager = {
 			["TrackDuration"] = 1,
 			["Duration"] = 4,
 			["HasMessage"] = true,
-			["Message"] = "bounty_hunter_windwalk is being used. ",
+			["Message"] = '<font color="#ffffff">Beware</font> <font color="#cc3300">enemy</font> <font color="#ffffff">used</font> <img src="file://{images}/spellicons/bounty_hunter_wind_walk.png" class="HeroBadge" /> <font color="#ffffff">(Windwalk)</font>',
 			["MinimapImage"] = "minimap_plaincircle"
 		},
 		["smoke_of_deceit"] = {
 			["TrackDuration"] = 1,
 			["Duration"] = 4,
 			["HasMessage"] = true,
-			["Message"] = "Smoke of Deceit is being used.",
+			["Message"] = '<font color="#ffffff">Beware</font> <img src="file://{images}/items/smoke_of_deceit.png" class="HeroBadge" /> <font color="#ffffff">(</font><font color="#8A2BE2">Smoke of Deceit</font><font color="#ffffff">)</font> <font color="#ffffff">is being used.</font>',
 			["MinimapImage"] = "minimap_plaincircle"
 		},
 		["nyx_assassin_vendetta_start"] = {
 			["TrackDuration"] = 1,
 			["Duration"] = 4,
 			["HasMessage"] = true,
-			["Message"] = "Vendetta is being used.",
+			["Message"] = '<font color="#ffffff">Beware</font> <img src="file://{images}/spellicons/nyx_assassin_vendetta.png" class="HeroBadge" /> <font color="#ffffff">(Vendetta)</font> <font color="#ffffff">is being used.</font>',
 			["MinimapImage"] = "minimap_plaincircle"
 		}
 	},
@@ -73,17 +73,11 @@ local ParticleManager = {
 			Duration = 2,
 			HasMessage = false
 		},
-		["clinkz_death_pact_buff"] = {
-			TrackDuration = 1,
-			Duration = 3,
-			HasMessage = true,
-			Message = "Death pact is being used."
-		},
 		["clinkz_windwalk"] = {
 			TrackDuration = 1,
 			Duration = 4,
 			HasMessage = true,
-			Message = "clinkz_windwalk is being used."
+			Message = '<font color="#ffffff">Beware</font> <img src="file://{images}/spellicons/clinkz_wind_walk.png" class="HeroBadge" /> <font color="#ffffff">(Clinkz Windwalk)</font> <font color="#ffffff">is being used.</font>'
 		},
 		["invoker_exort_orb"] = {
 			TrackDuration = 1,
@@ -109,7 +103,7 @@ local ParticleManager = {
 			TrackDuration = 1,
 			Duration = 5,
 			HasMessage = true,
-			Message = "Enemy using Moonlight Shadow."
+			Message = '<font color="#ffffff">Beware</font> <font color="#cc3300">enemy</font> <font color="#ffffff">used</font> <img src="file://{images}/spellicons/mirana_invis.png" class="HeroBadge" /> <font color="#ffffff">(Moonlight Shadow)</font>'
 		},
 		["necrolyte_sadist"] = {
 			TrackDuration = 1,
@@ -157,7 +151,6 @@ local ParticleManager = {
 	{
 		antimage_blink_end = true,
 		axe_beserkers_call_owner = true,
-		clinkz_death_pact_buff = true,
 		clinkz_windwalk = true,
 		doom_bringer_devour = true,
 		invoker_exort_orb = true,
@@ -180,9 +173,9 @@ local NeedInit = true
 local ParticleData = {}
 
 function AbilityAlert.OnScriptLoad()
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ AbilityAlert.lua ] [ Version 0.7 ] Script load.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ AbilityAlert.lua ] [ Version 0.8 ] Script load.")
 	
-	for k, v in pairs( ParticleData ) do
+	for k in pairs( ParticleData ) do
 		ParticleData[ k ] = nil
 	end
 	
@@ -194,9 +187,9 @@ function AbilityAlert.OnScriptLoad()
 end
 
 function AbilityAlert.OnGameEnd()
-	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ AbilityAlert.lua ] [ Version 0.7 ] Game end. Reset all variable.")
+	Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ AbilityAlert.lua ] [ Version 0.8 ] Game end. Reset all variable.")
 	
-	for k, v in pairs( ParticleData ) do
+	for k in pairs( ParticleData ) do
 		ParticleData[ k ] = nil
 	end
 	
@@ -415,11 +408,18 @@ end
 
 function AbilityAlert.OnDraw()
 	if Menu.IsEnabled(AbilityAlert.OptionEnable) == false then return end
-	if Engine.IsInGame() == false then return end
-	if Heroes.GetLocal() == nil then return end
 	
+	if
+		Engine.IsInGame() == false
+		or GameRules.GetGameState() < 4 
+		or GameRules.GetGameState() > 5
+		or Heroes.GetLocal() == nil
+	then
+		return
+	end
+
 	if NeedInit then
-		for k, v in pairs( ParticleData ) do
+		for k in pairs( ParticleData ) do
 			ParticleData[ k ] = nil
 		end
 		
@@ -429,7 +429,7 @@ function AbilityAlert.OnDraw()
 		TableData = nil
 		NeedInit = false
 		
-		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ AbilityAlert.lua ] [ Version 0.7 ] Game started, init script done.")
+		Console.Print("[" .. os.date("%I:%M:%S %p") .. "] - - [ AbilityAlert.lua ] [ Version 0.8 ] Game started, init script done.")
 	end
 
 	for k, v in pairs( ParticleData ) do
@@ -438,7 +438,7 @@ function AbilityAlert.OnDraw()
 		end
 			
 		if v.Position ~= nil and v.DoneDraw == false then
-			MiniMap.AddIconByName(v.IconIndex, v.Texture, v.Position, 255, 255, 255, 255, v.duration, 900)
+			MiniMap.AddIconByName(v.IconIndex, v.Texture, v.Position, 255, 255, 255, 255, v.duration, 1000)
 				
 			if v.PrintMessage then
 				Chat.Print("ConsoleChat", '<font color="White">'.. AbilityAlert.GetTime() ..' →</font> <font color="Red">'.. v.Msg .. '</font>')

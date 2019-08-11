@@ -1,4 +1,4 @@
-# Hake.me-AbilityAlert Version 0.7
+# Hake.me-AbilityAlert Version 0.8
 
 # Features!
   - Draw on the minimap when certain Abilities being used.
@@ -26,7 +26,6 @@
 			* Windwalk
 			* Jinada active buff
 	   4. Clinkz
-            * Death pact
 			* Windwalk
 	   5. Doom
             * Devour
